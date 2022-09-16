@@ -24,6 +24,12 @@ export function Game() {
     navigation.goBack();
   }
 
+  async function getDiscord(adsId: string) {
+    fetch(`http://172.28.64.1:3333/ads/${adsId}/discord`)
+    .then((res) => res.json())
+    .then((data) => setDiscordDuoSelected(data));
+  }
+
   useEffect(() => {
     fetch(`http://172.28.64.1:3333/games/${game.id}/ads`)
       .then((res) => res.json())
@@ -58,7 +64,7 @@ export function Game() {
           data={duos}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <DuoCard data={item} onConnect={() => {}} />
+            <DuoCard data={item} onConnect={() => getDiscord(item.id)} />
           )}
           horizontal
           style={[
@@ -74,7 +80,8 @@ export function Game() {
         />
 
         <DuoMatch
-          visible={discordDuoSelected > 0}
+          visible={discordDuoSelected.length > 0}
+          discord={discordDuoSelected}
           onClose={() => setDiscordDuoSelected("")}
         />
       </SafeAreaView>
